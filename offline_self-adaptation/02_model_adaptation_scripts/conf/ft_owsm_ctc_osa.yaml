@@ -1,0 +1,69 @@
+# LoRA finetune related
+use_lora: true
+save_strategy: adapter_only
+
+rir_scp: null
+rir_apply_prob: 1.0
+noise_scp: null
+noise_apply_prob: 1.0
+noise_db_range: '13_15'
+speech_volume_normalize: null
+non_linguistic_symbols: null
+
+# BatchSampler related
+num_iters_per_epoch: null
+
+# BUG
+# https://github.com/espnet/espnet/issues/5927
+multiple_iterator: false
+
+preprocessor_conf:
+  speech_name: speech
+  text_name: text
+
+# training related
+seed: 42
+num_workers: 4
+ngpu: 1
+batch_type: unsorted
+batch_size: 1
+#batch_type: numel
+##batch_bins: 1600000
+#batch_bins: 500000
+accum_grad: 20
+max_epoch: 2
+# Deactivate averaging
+nbest_averaging_interval: 0
+patience: null
+init: null
+best_model_criterion:
+-   - valid
+    - loss
+    - min
+keep_nbest_models: 1000
+use_amp: true
+
+optim: adam
+optim_conf:
+    lr: 0.001
+    weight_decay: 0.000001
+scheduler: steplr
+scheduler_conf:
+    gamma: 1.0
+    step_size: 1
+
+specaug: specaug
+specaug_conf:
+    apply_time_warp: true
+    time_warp_window: 5
+    time_warp_mode: bicubic
+    apply_freq_mask: true
+    freq_mask_width_range:
+    - 0
+    - 27
+    num_freq_mask: 2
+    apply_time_mask: true
+    time_mask_width_ratio_range:
+    - 0.
+    - 0.05
+    num_time_mask: 5
